@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GreenTrip – Accueil</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-green-50 min-h-screen flex flex-col">
+
+  <nav class="flex justify-between items-center bg-white shadow px-6 py-4">
+    <a href="index.html" class="text-green-600 font-bold text-2xl">🌿 GreenTrip</a>
+    <div class="flex items-center space-x-4">
+      <a href="add-trip.html" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">+ Ajouter un trajet</a>
+      <a href="profile.html" title="Profil utilisateur">
+        <img src="https://img.icons8.com/ios-filled/50/4ade80/user.png" alt="Profil" class="w-8 h-8">
+      </a>
+    </div>
+  </nav>
+
+  <section class="p-6 max-w-3xl mx-auto w-full">
+    <div class="flex gap-3">
+      <input id="searchInput" type="text" placeholder="🔍 Rechercher un trajet..." class="flex-grow border rounded p-3 focus:ring focus:ring-green-300">
+      <button id="searchBtn" class="bg-green-600 text-white px-4 rounded hover:bg-green-700">Rechercher</button>
+    </div>
+  </section>
+
+  <main id="tripList" class="p-6 max-w-3xl mx-auto space-y-4 flex-grow"></main>
+
+  <footer class="text-center text-gray-600 py-4 bg-white border-t mt-auto">
+    © 2025 GreenTrip — Prototype Frontend par Empereur de Yozora Garden 🌿
+  </footer>
+
+  <script>
+    const trips = [
+      {departure: "Paris", arrival: "Lyon", date: "2025-11-02", price: 35},
+      {departure: "Marseille", arrival: "Nice", date: "2025-11-05", price: 20},
+      {departure: "Toulouse", arrival: "Bordeaux", date: "2025-11-07", price: 28},
+    ];
+
+    const tripList = document.getElementById('tripList');
+
+    function displayTrips(list) {
+      if (list.length === 0) {
+        tripList.innerHTML = `<p class="text-gray-600 text-center mt-10">Aucun trajet trouvé 🚗💨</p>`;
+        return;
+      }
+
+      tripList.innerHTML = list.map(t => `
+        <div class="bg-white p-4 rounded-lg shadow-md">
+          <div class="flex justify-between items-center">
+            <h3 class="text-lg font-semibold text-green-700">${t.departure} → ${t.arrival}</h3>
+            <span class="text-gray-500">${t.date}</span>
+          </div>
+          <p class="mt-2 text-gray-700">Prix : <strong>${t.price} €</strong></p>
+          <button class="mt-3 bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">Réserver</button>
+        </div>
+      `).join('');
+    }
+
+    document.getElementById('searchBtn').addEventListener('click', () => {
+      const query = document.getElementById('searchInput').value.toLowerCase();
+      const results = trips.filter(t => 
+        t.departure.toLowerCase().includes(query) || 
+        t.arrival.toLowerCase().includes(query)
+      );
+      displayTrips(results);
+    });
+
+    displayTrips(trips);
+  </script>
+</body>
+</html>
