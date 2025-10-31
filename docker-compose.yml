@@ -1,0 +1,26 @@
+services:
+  db:
+    image: postgres
+    restart: always
+    # set shared memory limit when using docker-compose
+    shm_size: 128mb
+    # or set shared memory limit when deploy via swarm stack
+    #volumes:
+    #  - type: tmpfs
+    #    target: /dev/shm
+    #    tmpfs:
+    #      size: 134217728 # 128*2^20 bytes = 128Mb
+    # INFO: use a file binding to seed the database from a pgdump
+    volumes:
+      - ./mig:/docker-entrypoint-initdb.d/:ro
+      - '/etc/localtime:/etc/localtime:ro'
+    environment:
+      POSTGRES_PASSWORD: unreadable
+      POSTGRES_USER: green_trip
+      POSTGRES_DB: green_trip
+    ports:
+      - 5432:5432
+
+volumes:
+  pg_data:
+    name: "green_trip_db_data"
